@@ -1,13 +1,11 @@
 const axios = require('axios').default;
+const base_url = 'https://pixabay.com/api/';
+const KEY = '30770270-1c512d3309800b706c0d5f4a2';
 
-async function getUser() {
-  try {
-    const response = await axios.get(
-      'https://pixabay.com/api/?key=30770270-1c512d3309800b706c0d5f4a2&q=dog&image_type=photo&orientation=horizontal&safesearch=true'
-    );
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
+export async function fetchImages(searchQuery) {
+  const response = await axios.get(
+    `${base_url}?key=${KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1`
+  );
+  console.log(response);
+  return response;
 }
-getUser();

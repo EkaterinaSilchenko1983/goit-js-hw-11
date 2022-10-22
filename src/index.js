@@ -1,23 +1,29 @@
 import './css/styles.css';
+import { fetchImages } from './js/fetchImages';
 
 // import SimpleLightbox from 'simplelightbox';
 
 // import 'simplelightbox/dist/simple-lightbox.min.css';
 
 // let lightbox = new SimpleLightbox('.gallery a');
-const base_url = 'https://pixabay.com/api/';
-const KEY = '30770270-1c512d3309800b706c0d5f4a2';
+const refs = {
+  searchForm: document.querySelector('#search-form'),
+  inputData: document.querySelector('input'),
+  searchBtn: document.querySelector('button[type="submit"]'),
+  gallery: document.querySelector('.gallery'),
+  loadMoreBtn: document.querySelector('.load-more'),
+};
 
-const axios = require('axios').default;
+refs.searchForm.addEventListener('submit', onSearch);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
-async function getUser() {
-  try {
-    const response = await axios.get(
-      `${base_url}?key=${KEY}&q=dog&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1`
-    );
-    console.log(response);
-  } catch (error) {
-    console.error(error);
-  }
+function onSearch(e) {
+  e.preventDefault();
+  const searchData = e.currentTarget.elements.searchQuery.value.trim();
+  console.log(searchData);
+  fetchImages(searchData);
 }
-getUser();
+
+function onLoadMore(e) {
+  fetchImages(searchData);
+}

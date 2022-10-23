@@ -12,22 +12,27 @@ const refs = {
   inputData: document.querySelector('input'),
   searchBtn: document.querySelector('button[type="submit"]'),
   gallery: document.querySelector('.gallery'),
-  // loadMoreBtn: document.querySelector('.load-more'),
+  loadMoreBtn: document.querySelector('.load-more'),
 };
+let lightbox = new SimpleLightbox('.gallery a');
+let page = 1;
 
 refs.searchForm.addEventListener('submit', onSearch);
-// // refs.loadMoreBtn.addEventListener('click', onLoadMore);
+refs.loadMoreBtn.addEventListener('click', onLoadMore);
+refs.loadMoreBtn.setAttribute('hidden', true);
 
 function onSearch(e) {
   e.preventDefault();
-  const searchValue = e.currentTarget.elements.searchQuery.value.trim();
+  const searchValue = refs.inputData.value.trim();
 
   // if (!searchValue) {
   //   refs.gallery.innerHTML = '';
   // }
 
-  fetchImages(searchValue).then(data => {
+  fetchImages(searchValue, page).then(data => {
     renderMarkup(data.hits);
+    refs.loadMoreBtn.removeAttribute('hidden');
+    lightbox.refresh();
 
     // if (data.hits.length === 0) {
     //   Notiflix.Notify.info(
@@ -40,11 +45,18 @@ function onSearch(e) {
   });
 }
 
-// function onLoadMore(e) {
-//   fetchImages(searchValue);
-// }
+function onLoadMore(e) {
+  page += 1;
+  const searchValue = refs.inputData.value.trim();
+
+  fetchImages(searchValue, page).then(data => {
+    renderMarkup(data.hits);
+
+    lightbox.refresh();
+  });
+}
 
 function renderMarkup(images) {
   const markupImage = markup(images);
-  refs.gallery.innerHTML = markupImage;
+  refs.gallery.innerHTML += markupImage;
 }

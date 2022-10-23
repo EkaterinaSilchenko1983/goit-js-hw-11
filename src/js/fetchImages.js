@@ -9,3 +9,17 @@ export async function fetchImages(searchQuery) {
   console.log(response);
   return response;
 }
+
+// export function fetchImages(searchQuery) {
+//   const response = fetch(
+//     `${base_url}?key=${KEY}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=1`
+//   ).then(response => {
+//     console.log(response);
+//     if (!response.ok || response.status === 404) {
+//       throw new Error('Oops, there is no country with that name');
+//     }
+//     return response.json();
+//   });
+//   console.log(response);
+//   return response;
+// }

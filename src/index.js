@@ -19,14 +19,13 @@ let page = 1;
 
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
-refs.loadMoreBtn.setAttribute('hidden', true);
 
 function onSearch(e) {
   e.preventDefault();
   clearImages();
   const searchValue = refs.inputData.value.trim();
 
-  if (searchValue !== 0) {
+  if (searchValue) {
     fetchImages(searchValue, page).then(data => {
       if (data.hits.length === 0) {
         Notiflix.Notify.warning(
@@ -48,15 +47,16 @@ function onLoadMore(e) {
 
   fetchImages(searchValue, page).then(data => {
     renderMarkup(data.hits);
-
     lightbox.refresh();
+    const totalPage = data.totalHits / 40;
+    if (totalPage <= page) {
+      refs.loadMoreBtn.setAttribute('hidden', true);
+      Notiflix.Notify.warning(
+        "We're sorry, but you've reached the end of search results."
+      );
+    }
   });
 }
-
-// function renderMarkup(images) {
-//   const markupImage = markup(images);
-//   refs.gallery.innerHTML += markupImage;
-// }
 
 function renderMarkup(images) {
   refs.gallery.insertAdjacentHTML('beforeend', markup(images));

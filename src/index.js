@@ -17,8 +17,19 @@ const refs = {
 let lightbox = new SimpleLightbox('.gallery a');
 let page = 1;
 
+// const { height: cardHeight } = document
+//   .querySelector('.gallery')
+//   .firstElementChild.getBoundingClientRect();
+
+// window.scrollBy({
+//   top: cardHeight * 2,
+//   behavior: 'smooth',
+// });
+
 refs.searchForm.addEventListener('submit', onSearch);
 refs.loadMoreBtn.addEventListener('click', onLoadMore);
+// refs.loadMoreBtn.setAttribute('hidden', true);
+refs.loadMoreBtn.style.display = 'none';
 
 function onSearch(e) {
   e.preventDefault();
@@ -34,7 +45,8 @@ function onSearch(e) {
       } else {
         renderMarkup(data.hits);
         Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-        refs.loadMoreBtn.removeAttribute('hidden');
+        // refs.loadMoreBtn.removeAttribute('hidden');
+        refs.loadMoreBtn.style.display = 'block';
         lightbox.refresh();
       }
     });
@@ -50,7 +62,8 @@ function onLoadMore(e) {
     lightbox.refresh();
     const totalPage = data.totalHits / 40;
     if (totalPage <= page) {
-      refs.loadMoreBtn.setAttribute('hidden', true);
+      // refs.loadMoreBtn.setAttribute('hidden', true);
+      refs.loadMoreBtn.style.display = 'none';
       Notiflix.Notify.warning(
         "We're sorry, but you've reached the end of search results."
       );
@@ -64,6 +77,7 @@ function renderMarkup(images) {
 
 function clearImages() {
   page = 1;
-  refs.loadMoreBtn.setAttribute('hidden', true);
+  // refs.loadMoreBtn.setAttribute('hidden', true);
+  refs.loadMoreBtn.style.display = 'none';
   refs.gallery.innerHTML = '';
 }

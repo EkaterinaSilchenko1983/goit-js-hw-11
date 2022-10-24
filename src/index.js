@@ -23,26 +23,23 @@ refs.loadMoreBtn.setAttribute('hidden', true);
 
 function onSearch(e) {
   e.preventDefault();
+  clearImages();
   const searchValue = refs.inputData.value.trim();
 
-  // if (!searchValue) {
-  //   refs.gallery.innerHTML = '';
-  // }
-
-  fetchImages(searchValue, page).then(data => {
-    renderMarkup(data.hits);
-    refs.loadMoreBtn.removeAttribute('hidden');
-    lightbox.refresh();
-
-    // if (data.hits.length === 0) {
-    //   Notiflix.Notify.info(
-    //     'Sorry, there are no images matching your search query. Please try again.'
-    //   );
-    // } else {
-    //   renderMarkup(data.hits);
-    //   lightbox.refresh();
-    // }
-  });
+  if (searchValue !== 0) {
+    fetchImages(searchValue, page).then(data => {
+      if (data.hits.length === 0) {
+        Notiflix.Notify.warning(
+          'Sorry, there are no images matching your search query. Please try again.'
+        );
+      } else {
+        renderMarkup(data.hits);
+        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+        refs.loadMoreBtn.removeAttribute('hidden');
+        lightbox.refresh();
+      }
+    });
+  }
 }
 
 function onLoadMore(e) {
@@ -56,7 +53,17 @@ function onLoadMore(e) {
   });
 }
 
+// function renderMarkup(images) {
+//   const markupImage = markup(images);
+//   refs.gallery.innerHTML += markupImage;
+// }
+
 function renderMarkup(images) {
-  const markupImage = markup(images);
-  refs.gallery.innerHTML += markupImage;
+  refs.gallery.insertAdjacentHTML('beforeend', markup(images));
+}
+
+function clearImages() {
+  page = 1;
+  refs.loadMoreBtn.setAttribute('hidden', true);
+  refs.gallery.innerHTML = '';
 }

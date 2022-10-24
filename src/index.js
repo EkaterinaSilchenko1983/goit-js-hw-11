@@ -37,19 +37,23 @@ function onSearch(e) {
   const searchValue = refs.inputData.value.trim();
 
   if (searchValue) {
-    fetchImages(searchValue, page).then(data => {
-      if (data.hits.length === 0) {
-        Notiflix.Notify.warning(
-          'Sorry, there are no images matching your search query. Please try again.'
-        );
-      } else {
-        renderMarkup(data.hits);
-        Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
-        // refs.loadMoreBtn.removeAttribute('hidden');
-        refs.loadMoreBtn.style.display = 'block';
-        lightbox.refresh();
-      }
-    });
+    fetchImages(searchValue, page)
+      .then(data => {
+        if (data.hits.length === 0) {
+          Notiflix.Notify.warning(
+            'Sorry, there are no images matching your search query. Please try again.'
+          );
+        } else {
+          renderMarkup(data.hits);
+          Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
+          // refs.loadMoreBtn.removeAttribute('hidden');
+          refs.loadMoreBtn.style.display = 'block';
+          lightbox.refresh();
+        }
+      })
+      .catch(function (error) {
+        console.log('Error', error.message);
+      });
   }
 }
 

@@ -55,6 +55,9 @@ function onSearch(e) {
         console.log('Error', error.message);
       });
   }
+  if (searchValue === '') {
+    Notiflix.Notify.failure('Oops, please enter data in the search field');
+  }
 }
 
 function onLoadMore(e) {
